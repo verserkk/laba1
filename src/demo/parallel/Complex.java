@@ -46,8 +46,8 @@ package demo.parallel;
  */
 public class Complex {
     
-    private double re;   // the real part
-    private double im;   // the imaginary part
+    double re;   // the real part
+    double im;   // the imaginary part
 
     /** 
      * create a new object with the given real and imaginary parts
@@ -83,6 +83,73 @@ public class Complex {
         re = real;
         im = imag;
         return this;
+    }
+    public Complex minus(Complex b) {
+        re -= b.re;
+        im -= b.im;
+        return this;
+    }
+
+    /**
+     * Divide operation.
+     * @param b divisor
+     * @return this Complex object whose value is this / b
+     */
+    public Complex divide(Complex b) {
+        double denominator = b.re * b.re + b.im * b.im;
+        double real = (re * b.re + im * b.im) / denominator;
+        double imag = (im * b.re - re * b.im) / denominator;
+        re = real;
+        im = imag;
+        return this;
+    }
+
+    /**
+     * Power operation (this^n).
+     * @param n exponent
+     * @return this Complex object whose value is this^n
+     */
+    public Complex power(int n) {
+        if (n == 0) {
+            re = 1;
+            im = 0;
+            return this;
+        }
+
+        Complex result = new Complex(1, 0);
+        Complex base = new Complex(re, im);
+
+        for (int i = 0; i < Math.abs(n); i++) {
+            result = result.times(base);
+        }
+
+        if (n < 0) {
+            result = new Complex(1, 0).divide(result);
+        }
+
+        re = result.re;
+        im = result.im;
+        return this;
+    }
+
+    /**
+     * Calculate sine of complex number.
+     * @return new Complex object with sine value
+     */
+    public Complex sin() {
+        double real = Math.sin(re) * Math.cosh(im);
+        double imag = Math.cos(re) * Math.sinh(im);
+        return new Complex(real, imag);
+    }
+
+    /**
+     * Calculate cosine of complex number.
+     * @return new Complex object with cosine value
+     */
+    public Complex cos() {
+        double real = Math.cos(re) * Math.cosh(im);
+        double imag = -Math.sin(re) * Math.sinh(im);
+        return new Complex(real, imag);
     }
 
     /**
